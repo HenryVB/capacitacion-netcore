@@ -3,48 +3,41 @@ using Demo.Domain;
 using Demo.Infraestructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Employee.Infraestructure
+namespace Demo.Application.Services
 {
     public class MovieService : IMovieService
     {
 
-        private readonly MovieContext _context;
+        private readonly IMovieRepository _movieRepository;
 
-        public MovieService(MovieContext context)
+        public MovieService(IMovieRepository movieRepository)
         {
-            _context = context;
-        }
-
-        public async Task<Movie> Create(Movie customer)
-        {
-            _context.Movies.Add(customer);
-            await _context.SaveChangesAsync();
-            return customer;
-        }
-
-        public async Task Delete(Movie movie)
-        {
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
+            _movieRepository = movieRepository;
         }
 
         public async Task<List<Movie>> GetAll()
         {
-            return await _context.Movies.AsNoTracking().ToListAsync();
+            return await _movieRepository.GetAll();
         }
 
         public async Task<Movie> GetById(int id)
         {
-            return await _context.Movies.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            return await _movieRepository.GetById(id);
+        }
+
+        public async Task<Movie> Create(Movie movie)
+        {
+            return await _movieRepository.Create(movie);
+        }
+
+        public async Task Delete(Movie movie)
+        {
+            await _movieRepository.Delete(movie);
         }
 
         public async Task<Movie> Update(Movie movie)
         {
-            _context.Movies.Update(movie);
-            _context.Entry(movie).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return movie;
+            return await _movieRepository.Update(movie);
         }
     }
 }

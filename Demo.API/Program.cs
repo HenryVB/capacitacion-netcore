@@ -1,7 +1,8 @@
 
 using Demo.Application.Interfaces;
 using Demo.Infraestructure;
-using Employee.Infraestructure;
+using Demo.Application.Services;
+using Demo.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.API
@@ -24,7 +25,7 @@ namespace Demo.API
 
             //Configuracion DI Services y Repository
             builder.Services.AddScoped<IMovieService, MovieService>();
-            //builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
             var app = builder.Build();
 
